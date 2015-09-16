@@ -1,0 +1,61 @@
+1.Liberate our code
+    https://github.com/hackreactor/liberator
+
+2.figure out how to use node modules in Azure
+3. reconfig our app to work both locally and "in production" (on azure)
+    --Inject Production Configuration Dependencies
+    --Set necessary environment variables (which will be available on process.env?) 
+          (other variables will be handled will be populated by the server instance?)
+4. Create and config server using Azure CLI (command line interface)
+  1. install azurecli: npm install -g azure-cli
+  2. Connect to Azure Account
+    -Authenticate and download credentials: azure account download
+    -Install Credentials: azure account import <FILE_PATH>
+  3. Get SHA (not sure what this is) of BizSpark account (wtf is this?): azure account list
+  4. Set Azure-cli to use BizSpark account: azure account set <SHA_OF_BIZSPARK_ACCOUNT>
+  5. CD to your repo directory: cd <REPO_PATH>
+  6. Create a new website in azure(within the repo directory): azure site create <NAME_OF_SITE> --git
+      (this creates a new remote in our repo named 'azure'): git remote -v
+      (NOTE: we will likely need to use the web-interface to reset our deployment credentials for the specific site we just created now) (not entirely following)
+  7. View environment variables set up by our server: azure site appsetting list <LIST_NAME>
+  8. Add ENVIRONMENTAL variables to our site so that our node server can access them dynamically: azure site appsetting add <KEY>=<VALUE>  (EG:.... add NODE_ENV=production)
+  9. if we need to delete environmental variables: azure site appsetting clear <KEY>
+5. DEPLOY to our server using Azure-CLI
+  1. scale the site so it can handle the deployment process: azure site scale mode standard <SITE_NAME>
+  2. deploy the repo to azure by pushing to the 'azure' remote: git push azure master
+  3. log the output of our site as it deploys to track errors: azure site log tail <SITE_NAME>
+    (NOTE: If your website is named foo.azurewebsites.net, try going to http://foo.scm.azurewebsites.net. Your login credentials will be your Git/FTP username and password. Once in, you’ll be able to open a PowerShell prompt, see running processes, download a diagnostics dump, and more.)( https://github.com/projectkudu/kudu/wiki/Accessing-the-kudu-service )
+  4. after deployment finishes, check that the site is running: azure site browse
+  5. CRITICAL!!!!! Scale the site back down now that deployment has 
+    finished: azure site scale mode free <SITE_NAME>
+  (NOTE: deploy.sh is a script provided to run npm install, bower install, and grunt as part of deployment, but only if the respective config files are present NO NEED TO EDIT IT)
+6. Create a Gruntfile
+  (NOTE: Grunt is for automation example/tutorial http://24ways.org/2013/grunt-is-not-weird-and-hard/ )
+  1. Use Grunt (gruntjs.com) to create a build script
+  2. Concatenate files before deployment
+  3. "Uglify" code before deployment with grunt (don't forget to update views to point to minified versions?)
+  4. Run jshint using grunt before deployment (should exit process and exit if jshint fails)
+  5. Run mocha tests before deployment (if tests fail build process should exit)
+  (This should do it: grunt deploy (hosts locally): grunt deploy --prod (pushes up to the production server)  )
+7. Refactor DB
+  (SQLite isn't great for well-trafficked production sites)
+  1. Refactor the app to use MongoDB/Mongoose, and run locally
+  2. Figure out how to host Mongo (create an instance) on azure http://www.windowsazure.com/en-us/documentation/articles/store-mongolab-web-sites-nodejs-store-data-mongodb/
+  3. Refactor the DB code to handle both environments-- if local connect to a local DB, and when on the deployed site, should connect to the hosted Mongo instance
+  4. Setting up Mongo on Azure
+    1. Select your email address in the upper right corner, then choose “View my bill” 
+    2. Click “Add subscription”
+    3. Select “Pay as you go” 
+    4. Enter in your credit card, etc. IF YOU FOLLOW THESE STEPS YOU WILL NOT BE CHARGED
+    5. Go back to the Management Portal and select "Subscriptions" on the top right, then make sure the “Pay-As-You-Go” box is checked. (You may need to refresh the Management Portal tab for it to appear)
+    6. Click the “+ NEW” button in the lower left
+    7. Click on “Store”
+    8. Click on “MongoLab” and then the arrow in the lower right of the dialog
+    9. Make sure “Sandbox” is checked in the order form
+    10. Select “Pay-As-You-Go” from the subscription drop-down menu
+    11. Continue checking out. You will not be charged (make sure the cost is $0.00/month before confirming)
+    12. Back in the Azure portal, navigate to Add-Ons
+    13. Select MongoLab and then click “Connection Info” in the bottom bar to get the MongoDB URI for accessing your database
+
+ADVANCED -- Todo
+
