@@ -74,18 +74,19 @@ module.exports = function(grunt) {
         ],
         tasks: [
           'concat',
+          'jshint',
           'uglify'
         ]
       },
-      css: {
-        files: 'public/*.css',
-        tasks: ['cssmin']
-      }
+      // css: {
+      //   files: 'public/*.css',
+      //   tasks: ['cssmin']
+      // }
     },
 
     shell: {
       prodServer: {
-        //Is this right???
+        command: ['git push azure master'],
       }
     },
   });
@@ -120,21 +121,19 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
-  ]);
+  grunt.registerTask('build', ['concat', 'jshint', 'uglify']);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
+      grune.task.run('shell:prodServer');
       // add your production server task here
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
-  grunt.registerTask('deploy', [
-      // add your production server task here
-  ]);
+  grunt.registerTask('deploy', 'upload:prod');
 
-  grunt.registerTask('default', ['concat', 'jshint', 'uglify']);
+  // grunt.registerTask('default', ['build']);
 
 };
