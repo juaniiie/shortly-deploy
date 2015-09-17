@@ -11,8 +11,11 @@ public/dist
 # Icon must ends with two \r.
 Icon
 
-
+# Credentials
 Free\ Trial-9-16-2015-credentials.publishsettings
+
+#Built Client Files
+public/build
 
 # Floobits
 .floo

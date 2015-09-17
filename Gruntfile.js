@@ -2,8 +2,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    concat: {
-    },
 
     mochaTest: {
       test: {
@@ -21,12 +19,39 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        mangle: true
+      },
+      my_target: {
+        files: {
+          'public/build/production.min.js' : ['public/build/production.js']
+        }
+      }
+    },
+
+    concat: {
+      options: {
+        // separator: ';',
+        stripBanners: true
+      },
+      dist: {
+        src: [
+          'public/client/*.js',
+        ],
+        dest: 'public/build/production.js',
+      },
     },
 
     jshint: {
-      files: [
-        // Add filespec list here
-      ],
+      files: {
+        src: [
+          '*.js',
+          'test/**/*.js',
+          'public/build/production.js',
+          'lib/*.js',
+          'app/**/*.js'
+        ]
+      },
       options: {
         force: 'true',
         jshintrc: '.jshintrc',
@@ -60,6 +85,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        //Is this right???
       }
     },
   });
@@ -109,5 +135,6 @@ module.exports = function(grunt) {
       // add your production server task here
   ]);
 
+  grunt.registerTask('default', ['concat', 'jshint', 'uglify']);
 
 };
