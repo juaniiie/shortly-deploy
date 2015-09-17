@@ -134,6 +134,6 @@ module.exports = function(grunt) {
       // add your production server task here
   ]);
 
-  grunt.registerTask('default', ['concat', 'jshint', 'uglify']);
+  grunt.registerTask('default', [/*'concat',*/ 'jshint', 'uglify']);
 
 };
