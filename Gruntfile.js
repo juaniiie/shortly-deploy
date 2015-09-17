@@ -133,7 +133,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', function(){
-    grunt.option('prod') = true;
+    grunt.option('prod', true);
     grunt.task.run('upload');
   });
 
