@@ -16,6 +16,7 @@ Free\ Trial-9-16-2015-credentials.publishsettings
 
 #Built Client Files
 public/build
+public/*.min.css
 
 # Floobits
 .floo
