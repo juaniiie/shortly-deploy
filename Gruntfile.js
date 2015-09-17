@@ -31,7 +31,7 @@ module.exports = function(grunt) {
 
     concat: {
       options: {
-        // separator: ';',
+        separator: ';',
         stripBanners: true
       },
       dist: {
@@ -125,8 +125,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      // add your production server task here
-    } else {
+      } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
